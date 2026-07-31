@@ -16,6 +16,18 @@ interface CloudStoreData {
 const LOCAL_QUEUE_KEY = 'chw_local_queue';
 const CLOUD_STORE_KEY = 'cloud_synced_store';
 
+type ChangeListener = () => void;
+const changeListeners = new Set<ChangeListener>();
+
+export function subscribeToStoreChanges(listener: ChangeListener): () => void {
+  changeListeners.add(listener);
+  return () => changeListeners.delete(listener);
+}
+
+function notifyStoreChanged(): void {
+  changeListeners.forEach((listener) => listener());
+}
+
 function readJSON<T>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(key);
@@ -28,6 +40,7 @@ function readJSON<T>(key: string, fallback: T): T {
 
 function writeJSON<T>(key: string, value: T): void {
   localStorage.setItem(key, JSON.stringify(value));
+  notifyStoreChanged();
 }
 
 const emptyLocalQueue = (): LocalQueueData => ({
