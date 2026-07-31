@@ -1,32 +1,5 @@
-# React + TypeScript + Vite
+# AMHOS — AI Maternal Health Operating System
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Maternal and newborn deaths are often caused by coordination failure, not just clinical failure — a high-risk pregnancy that gets flagged in the field but never reaches a hospital in time. AMHOS is an offline-first coordination layer that connects community health workers, pregnant women, and hospitals around one shared workflow: register a pregnancy, flag risk early with a clear reason, and get that referral to a hospital before it becomes an emergency.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+This is a hackathon prototype (Vibe Code Marathon) demonstrating that workflow end-to-end in the browser. See the [repo README](../README.md) for setup and a full demo walkthrough.
