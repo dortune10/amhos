@@ -3,5 +3,6 @@
 # and out of the public GitHub repo.
 *
 !.gitignore
+!README.md
 !app/
 !app/**
