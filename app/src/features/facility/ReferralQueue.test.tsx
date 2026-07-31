@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, within, fireEvent } from '@testing-library/react';
 import { ReferralQueue } from './ReferralQueue';
 import { registerPatient } from '../registration/registerPatient';
 import { syncNow } from '../sync/syncService';
@@ -66,5 +66,48 @@ describe('ReferralQueue', () => {
     expect(within(rows[0]).getByText('HighPatient')).toBeInTheDocument();
     expect(within(rows[1]).getByText('MediumPatient')).toBeInTheDocument();
     expect(within(rows[2]).getByText('LowPatient')).toBeInTheDocument();
+  });
+
+  it('advances a referral status forward one step at a time, and it persists on re-render', () => {
+    registerPatient({
+      patientName: 'Amina',
+      gestationalAgeWeeks: 30,
+      riskFactorIds: ['severe_hypertension'],
+    });
+    syncNow();
+
+    const { rerender } = render(<ReferralQueue />);
+    fireEvent.click(screen.getByRole('button', { name: /mark dispatched/i }));
+
+    rerender(<ReferralQueue />);
+    expect(screen.getByText('dispatched')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /mark received/i })).toBeInTheDocument();
+  });
+
+  it('shows no advance button once outcome_logged is reached', () => {
+    const base: Omit<Referral, 'id' | 'patientName' | 'riskTier' | 'status'> = {
+      registrationId: 'reg-x',
+      riskFactors: [],
+      riskReasons: [],
+      gestationalAgeWeeks: 20,
+      createdAt: new Date().toISOString(),
+      syncedAt: new Date().toISOString(),
+    };
+    cloudStore.mergeSyncedItems({
+      registrations: [],
+      checkIns: [],
+      referrals: [
+        {
+          ...base,
+          id: 'ref-done',
+          patientName: 'DonePatient',
+          riskTier: 'High',
+          status: 'outcome_logged',
+        },
+      ],
+    });
+
+    render(<ReferralQueue />);
+    expect(screen.queryByRole('button', { name: /mark/i })).not.toBeInTheDocument();
   });
 });

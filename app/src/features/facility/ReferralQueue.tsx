@@ -1,8 +1,19 @@
 import { cloudStore } from '../../data/store';
-import type { Referral, RiskTier } from '../../data/types';
+import type { Referral, ReferralStatus, RiskTier } from '../../data/types';
 import { useStoreVersion } from '../../data/useStoreVersion';
 
 const TIER_RANK: Record<RiskTier, number> = { High: 0, Medium: 1, Low: 2 };
+
+const STATUS_SEQUENCE: ReferralStatus[] = ['flagged', 'dispatched', 'received', 'outcome_logged'];
+
+function nextStatus(status: ReferralStatus): ReferralStatus | null {
+  const index = STATUS_SEQUENCE.indexOf(status);
+  return index >= 0 && index < STATUS_SEQUENCE.length - 1 ? STATUS_SEQUENCE[index + 1] : null;
+}
+
+function advanceReferral(referralId: string, next: ReferralStatus): void {
+  cloudStore.updateReferral(referralId, (r) => ({ ...r, status: next }));
+}
 
 function sortReferrals(referrals: Referral[]): Referral[] {
   return [...referrals].sort((a, b) => {
@@ -40,6 +51,11 @@ export function ReferralQueue() {
               </ul>
             )}
             <span className="referral-status">{r.status.replace('_', ' ')}</span>
+            {nextStatus(r.status) && (
+              <button type="button" onClick={() => advanceReferral(r.id, nextStatus(r.status)!)}>
+                Mark {nextStatus(r.status)!.replace('_', ' ')}
+              </button>
+            )}
           </li>
         ))}
       </ul>
