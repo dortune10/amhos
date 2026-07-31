@@ -1,5 +1,7 @@
-node_modules/
-dist/
-.DS_Store
-*.local
-app_bkup_V1/
+# This repo tracks only app/ -- internal planning docs (PRD, SPEC, idea
+# refinement, pitch deck, hackathon brief, technical architecture) stay local
+# and out of the public GitHub repo.
+*
+!.gitignore
+!app/
+!app/**
