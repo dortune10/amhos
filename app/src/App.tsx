@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import { CaseloadView } from './features/caseload/CaseloadView';
 import { CheckInInbox } from './features/checkins/CheckInInbox';
+import { DistrictView } from './features/district/DistrictView';
 import { ReferralQueue } from './features/facility/ReferralQueue';
 import { RoleSwitcher, type Role } from './features/layout/RoleSwitcher';
 import { NotificationFeed } from './features/notifications/NotificationFeed';
@@ -36,9 +37,7 @@ function App() {
             <NotificationFeed />
           </div>
         )}
-        {role === 'district' && (
-          <p className="empty-state">District view coming soon.</p>
-        )}
+        {role === 'district' && <DistrictView />}
       </main>
     </div>
   );
