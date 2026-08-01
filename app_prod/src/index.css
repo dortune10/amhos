@@ -1,0 +1,90 @@
+:root {
+  --color-bg: #f4f6f5;
+  --color-surface: #ffffff;
+  --color-border: #dfe3e1;
+  --color-text: #1c2624;
+  --color-text-muted: #5b6864;
+  --color-primary: #146c53;
+  --color-primary-dark: #0e4f3d;
+  --color-high: #b3261e;
+  --color-high-bg: #fbe9e7;
+  --color-medium: #a15c00;
+  --color-medium-bg: #fff3dc;
+  --color-low: #1f7a44;
+  --color-low-bg: #e6f4ea;
+  --color-whatsapp: #25d366;
+  --radius: 10px;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+h1,
+h2,
+h3 {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.empty-state {
+  color: var(--color-text-muted);
+  font-style: italic;
+  padding: 1rem 0;
+}
+
+.mock-disclaimer,
+.access-note {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: 0.25rem 0 0.75rem;
+}
+
+.tier-badge {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.tier-badge--high {
+  background: var(--color-high-bg);
+  color: var(--color-high);
+}
+.tier-badge--medium {
+  background: var(--color-medium-bg);
+  color: var(--color-medium);
+}
+.tier-badge--low {
+  background: var(--color-low-bg);
+  color: var(--color-low);
+}

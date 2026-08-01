@@ -1,9 +1,17 @@
-# This repo tracks only app/ -- internal planning docs (PRD, SPEC, idea
-# refinement, pitch deck, hackathon brief, technical architecture) stay local
-# and out of the public GitHub repo.
+# This repo tracks only the app folders -- internal planning docs (PRD, SPEC,
+# idea refinement, pitch deck, hackathon brief, technical architecture) stay
+# local and out of the public GitHub repo.
+#
+# app/       -- frozen hackathon demo build
+# app_prod/  -- the fuller build in progress
 *
 !.gitignore
 !README.md
 !app/
 !app/**
+!app_prod/
+!app_prod/**
 app/appinfo.md
+app_prod/appinfo.md
+node_modules/
+dist/

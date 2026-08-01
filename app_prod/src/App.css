@@ -1,0 +1,380 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  background: var(--color-primary-dark);
+  color: #fff;
+  padding: 1.25rem 1.5rem 0.75rem;
+}
+.app-header h1 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.4rem;
+}
+.hackathon-note {
+  color: #cfe8de;
+  font-size: 0.8rem;
+  max-width: 60ch;
+  margin-top: 0.25rem;
+}
+
+.header-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.role-switcher {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.demo-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.demo-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9dc3b4;
+}
+.demo-confirm-prompt {
+  font-size: 0.8rem;
+  color: #ffd9d6;
+}
+.demo-controls button {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #e7f3ee;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+}
+.demo-controls button:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+.demo-controls button.demo-danger {
+  background: #b3261e;
+  border-color: #b3261e;
+  color: #fff;
+  font-weight: 600;
+}
+.role-switcher button {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #e7f3ee;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+.role-switcher button.active {
+  background: #fff;
+  color: var(--color-primary-dark);
+  font-weight: 600;
+}
+
+main {
+  flex: 1;
+  padding: 1.5rem;
+}
+
+/* Caseworker view reads as a field tool: narrow, stacked, card-based -- like
+   something you'd actually hold and use one-handed. */
+.caseworker-view {
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.registration-form,
+.caseload-view,
+.checkin-inbox,
+.sync-controls {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.registration-form form label,
+.checkin-inbox form label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-muted);
+}
+.registration-form form input,
+.registration-form form select,
+.checkin-inbox form select {
+  display: block;
+  width: 100%;
+  margin-top: 0.3rem;
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.risk-factor-option {
+  display: flex !important;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 400 !important;
+  margin-bottom: 0.35rem;
+}
+.risk-factor-option input {
+  width: auto !important;
+  margin: 0 !important;
+}
+
+.registration-form button[type='submit'],
+.checkin-inbox button[type='submit'] {
+  width: 100%;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 0.65rem;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.risk-result {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+}
+.risk-result--high {
+  background: var(--color-high-bg);
+  color: var(--color-high);
+}
+.risk-result--medium {
+  background: var(--color-medium-bg);
+  color: var(--color-medium);
+}
+.risk-result--low {
+  background: var(--color-low-bg);
+  color: var(--color-low);
+}
+.risk-result ul {
+  margin: 0.4rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.caseload-view ul,
+.checkin-inbox ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.caseload-row,
+.checkin-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+.caseload-row.tier-high {
+  border-left: 4px solid var(--color-high);
+}
+.caseload-row.tier-medium {
+  border-left: 4px solid var(--color-medium);
+}
+.caseload-row.tier-low {
+  border-left: 4px solid var(--color-low);
+}
+.patient-name {
+  font-weight: 600;
+  flex: 1 1 auto;
+}
+.sync-badge {
+  font-size: 0.75rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+}
+.sync-badge.synced {
+  background: var(--color-low-bg);
+  color: var(--color-low);
+}
+.sync-badge.unsynced {
+  background: #eee;
+  color: var(--color-text-muted);
+}
+
+.airplane-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+.offline-banner {
+  background: var(--color-medium-bg);
+  color: var(--color-medium);
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+.sync-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+.sync-actions button {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.pending-count {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.escalated-badge {
+  background: var(--color-low-bg);
+  color: var(--color-low);
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+.checkin-row button {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+}
+
+/* Facility + district views read as a dashboard: wide, grid-based. */
+.facility-view {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+@media (max-width: 800px) {
+  .facility-view {
+    grid-template-columns: 1fr;
+  }
+}
+
+.referral-queue,
+.notification-feed,
+.district-view {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.referral-queue ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.referral-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.4rem 0.75rem;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+.referral-row.tier-high {
+  border-left: 4px solid var(--color-high);
+}
+.referral-row.tier-medium {
+  border-left: 4px solid var(--color-medium);
+}
+.referral-row.tier-low {
+  border-left: 4px solid var(--color-low);
+}
+.risk-reasons {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+.referral-status {
+  text-transform: capitalize;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+.referral-row button {
+  grid-column: 1 / -1;
+  justify-self: start;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 0.35rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.notification-feed ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.notification-bubble {
+  background: #dcf8c6;
+  border-radius: 12px 12px 12px 2px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  position: relative;
+}
+.notification-bubble::before {
+  content: '💬';
+  margin-right: 0.35rem;
+}
+
+.district-view section {
+  margin-top: 1rem;
+}
+.district-view ul {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.district-view li {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+}
