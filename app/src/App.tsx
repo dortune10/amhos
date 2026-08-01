@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import { CaseloadView } from './features/caseload/CaseloadView';
 import { CheckInInbox } from './features/checkins/CheckInInbox';
+import { DemoControls } from './features/demo/DemoControls';
 import { DistrictView } from './features/district/DistrictView';
 import { ReferralQueue } from './features/facility/ReferralQueue';
 import { RoleSwitcher, type Role } from './features/layout/RoleSwitcher';
@@ -20,7 +21,10 @@ function App() {
           Vibe Code Marathon demo — web prototype standing in for the real offline-first
           mobile client. See SPEC.md for scope.
         </p>
-        <RoleSwitcher role={role} onChange={setRole} />
+        <div className="header-controls">
+          <RoleSwitcher role={role} onChange={setRole} />
+          <DemoControls />
+        </div>
       </header>
       <main>
         {role === 'caseworker' && (

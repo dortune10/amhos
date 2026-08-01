@@ -21,10 +21,52 @@
   margin-top: 0.25rem;
 }
 
+.header-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .role-switcher {
   display: flex;
   gap: 0.5rem;
   margin-top: 1rem;
+}
+
+.demo-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.demo-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9dc3b4;
+}
+.demo-confirm-prompt {
+  font-size: 0.8rem;
+  color: #ffd9d6;
+}
+.demo-controls button {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #e7f3ee;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+}
+.demo-controls button:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+.demo-controls button.demo-danger {
+  background: #b3261e;
+  border-color: #b3261e;
+  color: #fff;
+  font-weight: 600;
 }
 .role-switcher button {
   background: transparent;
