@@ -7,22 +7,31 @@ import { DistrictView } from './features/district/DistrictView';
 import { ReferralQueue } from './features/facility/ReferralQueue';
 import { RoleSwitcher, type Role } from './features/layout/RoleSwitcher';
 import { NotificationFeed } from './features/notifications/NotificationFeed';
+import { PatientDetail } from './features/patient/PatientDetail';
 import { RegistrationForm } from './features/registration/RegistrationForm';
 import { SyncControls } from './features/sync/SyncControls';
+import { VisitTaskList } from './features/visits/VisitTaskList';
 
 function App() {
   const [role, setRole] = useState<Role>('caseworker');
+  const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
 
   return (
     <div className="app">
       <header className="app-header">
-        <h1>AMHOS Prototype</h1>
+        <h1>AMHOS</h1>
         <p className="hackathon-note">
-          Vibe Code Marathon demo — web prototype standing in for the real offline-first
-          mobile client. See SPEC.md for scope.
+          Offline-first maternal care coordination — caseworkers, mothers, and partner
+          hospitals on one pathway.
         </p>
         <div className="header-controls">
-          <RoleSwitcher role={role} onChange={setRole} />
+          <RoleSwitcher
+            role={role}
+            onChange={(next) => {
+              setRole(next);
+              setSelectedPatientId(null);
+            }}
+          />
           <DemoControls />
         </div>
       </header>
@@ -30,9 +39,19 @@ function App() {
         {role === 'caseworker' && (
           <div className="caseworker-view">
             <SyncControls />
-            <RegistrationForm onRegistered={() => {}} />
-            <CaseloadView />
-            <CheckInInbox />
+            {selectedPatientId ? (
+              <PatientDetail
+                registrationId={selectedPatientId}
+                onClose={() => setSelectedPatientId(null)}
+              />
+            ) : (
+              <>
+                <RegistrationForm onRegistered={() => {}} />
+                <VisitTaskList />
+                <CaseloadView onSelectPatient={setSelectedPatientId} />
+                <CheckInInbox />
+              </>
+            )}
           </div>
         )}
         {role === 'facility' && (

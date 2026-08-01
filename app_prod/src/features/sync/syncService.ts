@@ -2,11 +2,12 @@ import { cloudStore, localQueueStore } from '../../data/store';
 import { createId } from '../../domain/id';
 
 export function getPendingCount(): number {
-  const { registrations, referrals, checkIns } = localQueueStore.getAll();
+  const { registrations, referrals, checkIns, visits } = localQueueStore.getAll();
   return (
     registrations.filter((r) => !r.syncedAt).length +
     referrals.filter((r) => !r.syncedAt).length +
-    checkIns.filter((c) => !c.syncedAt).length
+    checkIns.filter((c) => !c.syncedAt).length +
+    visits.filter((v) => !v.syncedAt).length
   );
 }
 
@@ -14,18 +15,24 @@ export function syncNow(): { syncedReferrals: number } {
   const local = localQueueStore.getAll();
   const now = new Date().toISOString();
 
-  const unsyncedRegistrations = local.registrations.filter((r) => !r.syncedAt);
-  const unsyncedReferrals = local.referrals.filter((r) => !r.syncedAt);
-  const unsyncedCheckIns = local.checkIns.filter((c) => !c.syncedAt);
-
-  const syncedRegistrations = unsyncedRegistrations.map((r) => ({ ...r, syncedAt: now }));
-  const syncedReferrals = unsyncedReferrals.map((r) => ({ ...r, syncedAt: now }));
-  const syncedCheckIns = unsyncedCheckIns.map((c) => ({ ...c, syncedAt: now }));
+  const syncedRegistrations = local.registrations
+    .filter((r) => !r.syncedAt)
+    .map((r) => ({ ...r, syncedAt: now }));
+  const syncedReferrals = local.referrals
+    .filter((r) => !r.syncedAt)
+    .map((r) => ({ ...r, syncedAt: now }));
+  const syncedCheckIns = local.checkIns
+    .filter((c) => !c.syncedAt)
+    .map((c) => ({ ...c, syncedAt: now }));
+  const syncedVisits = local.visits
+    .filter((v) => !v.syncedAt)
+    .map((v) => ({ ...v, syncedAt: now }));
 
   cloudStore.mergeSyncedItems({
     registrations: syncedRegistrations,
     referrals: syncedReferrals,
     checkIns: syncedCheckIns,
+    visits: syncedVisits,
   });
 
   for (const referral of syncedReferrals) {
@@ -47,6 +54,7 @@ export function syncNow(): { syncedReferrals: number } {
     registrations: local.registrations.map((r) => (r.syncedAt ? r : { ...r, syncedAt: now })),
     referrals: local.referrals.map((r) => (r.syncedAt ? r : { ...r, syncedAt: now })),
     checkIns: local.checkIns.map((c) => (c.syncedAt ? c : { ...c, syncedAt: now })),
+    visits: local.visits.map((v) => (v.syncedAt ? v : { ...v, syncedAt: now })),
   });
 
   return { syncedReferrals: syncedReferrals.length };

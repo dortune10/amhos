@@ -84,6 +84,56 @@ describe('ReferralQueue', () => {
     expect(screen.getByRole('button', { name: /mark received/i })).toBeInTheDocument();
   });
 
+  it('flags an in-flight referral that has blown its transit SLA', () => {
+    const longAgo = new Date(Date.now() - 40 * 3_600_000).toISOString();
+    cloudStore.mergeSyncedItems({
+      registrations: [],
+      checkIns: [],
+      referrals: [
+        {
+          id: 'ref-late',
+          registrationId: 'reg-x',
+          patientName: 'LatePatient',
+          riskFactors: [],
+          riskReasons: [],
+          riskTier: 'High',
+          gestationalAgeWeeks: 30,
+          status: 'dispatched',
+          createdAt: longAgo,
+          syncedAt: longAgo,
+        },
+      ],
+    });
+
+    render(<ReferralQueue />);
+    expect(screen.getByText(/delayed/i)).toBeInTheDocument();
+  });
+
+  it('does not flag a referral that arrived, however old', () => {
+    const longAgo = new Date(Date.now() - 40 * 3_600_000).toISOString();
+    cloudStore.mergeSyncedItems({
+      registrations: [],
+      checkIns: [],
+      referrals: [
+        {
+          id: 'ref-arrived',
+          registrationId: 'reg-y',
+          patientName: 'ArrivedPatient',
+          riskFactors: [],
+          riskReasons: [],
+          riskTier: 'High',
+          gestationalAgeWeeks: 30,
+          status: 'received',
+          createdAt: longAgo,
+          syncedAt: longAgo,
+        },
+      ],
+    });
+
+    render(<ReferralQueue />);
+    expect(screen.queryByText(/delayed/i)).not.toBeInTheDocument();
+  });
+
   it('shows no advance button once outcome_logged is reached', () => {
     const base: Omit<Referral, 'id' | 'patientName' | 'riskTier' | 'status'> = {
       registrationId: 'reg-x',

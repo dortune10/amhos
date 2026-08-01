@@ -100,7 +100,9 @@ main {
 .registration-form,
 .caseload-view,
 .checkin-inbox,
-.sync-controls {
+.sync-controls,
+.visit-task-list,
+.patient-detail {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
@@ -377,4 +379,219 @@ main {
   border-radius: 8px;
   padding: 0.4rem 0.75rem;
   font-size: 0.85rem;
+}
+
+/* ---- Scheduled visits (0-48h postnatal window + ANC) ---- */
+.section-note {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: 0.25rem 0 0.75rem;
+}
+.visit-task-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.visit-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.25rem 0.6rem;
+  align-items: center;
+  padding: 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+.visit-row--overdue {
+  border-left: 4px solid var(--color-high);
+  background: var(--color-high-bg);
+}
+.visit-row--due-soon {
+  border-left: 4px solid var(--color-medium);
+  background: var(--color-medium-bg);
+}
+.visit-row--upcoming {
+  border-left: 4px solid var(--color-border);
+}
+.visit-label {
+  grid-column: 1;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+.visit-urgency {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.visit-urgency--overdue {
+  color: var(--color-high);
+}
+.visit-urgency--due-soon {
+  color: var(--color-medium);
+}
+.visit-urgency--upcoming {
+  color: var(--color-text-muted);
+}
+.visit-due {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+.visit-row button {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+}
+
+/* ---- Caseload filters, delivery, selection ---- */
+.caseload-filters {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+.caseload-filters label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  gap: 0.2rem;
+  flex: 1 1 auto;
+}
+.caseload-filters input,
+.caseload-filters select {
+  padding: 0.4rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--color-text);
+}
+.patient-name-button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.record-delivery {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.75rem;
+}
+.delivered-badge {
+  background: var(--color-low-bg);
+  color: var(--color-low);
+  font-size: 0.72rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+
+/* ---- Patient detail + timeline ---- */
+.patient-detail-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.patient-detail-header h2 {
+  margin: 0;
+}
+.patient-detail-header button {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+}
+.patient-meta {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+.patient-risk-reasons {
+  background: var(--color-high-bg);
+  border-radius: 8px;
+  padding: 0.6rem 0.85rem;
+  margin: 0.85rem 0;
+}
+.patient-risk-reasons h3,
+.patient-detail h3 {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin: 0 0 0.35rem;
+}
+.patient-risk-reasons ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--color-high);
+  font-size: 0.88rem;
+}
+.patient-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.timeline-entry {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.15rem 0.6rem;
+  padding: 0.55rem 0.7rem;
+  border-left: 3px solid var(--color-primary);
+  background: var(--color-bg);
+  border-radius: 0 8px 8px 0;
+}
+.timeline-kind {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+  align-self: center;
+}
+.timeline-summary {
+  font-size: 0.9rem;
+}
+.timeline-detail,
+.timeline-when {
+  grid-column: 2;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* ---- Referral SLA breach ---- */
+.referral-row--breached {
+  background: var(--color-high-bg);
+}
+.sla-badge {
+  grid-column: 1 / -1;
+  justify-self: start;
+  background: var(--color-high);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+}
+.district-alert {
+  background: var(--color-high-bg) !important;
+  color: var(--color-high);
+  font-weight: 600;
 }

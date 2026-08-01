@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { syncNow, getPendingCount } from './syncService';
 import { cloudStore } from '../../data/store';
 import { registerPatient } from '../registration/registerPatient';
+import { recordDelivery } from '../visits/visitService';
 
 describe('syncNow', () => {
   beforeEach(() => {
@@ -49,6 +50,21 @@ describe('syncNow', () => {
     syncNow();
     expect(cloudStore.getAll().registrations).toHaveLength(1);
     expect(cloudStore.getAll().notifications).toHaveLength(1);
+  });
+
+  it('syncs visits scheduled offline, and counts them as pending beforehand', () => {
+    const { registration } = registerPatient({
+      patientName: 'Fatima',
+      gestationalAgeWeeks: 39,
+      riskFactorIds: [],
+    });
+    recordDelivery(registration.id);
+
+    expect(getPendingCount()).toBeGreaterThanOrEqual(3);
+    syncNow();
+
+    expect(cloudStore.getAll().visits.length).toBeGreaterThanOrEqual(3);
+    expect(getPendingCount()).toBe(0);
   });
 
   it('clears the pending count after syncing', () => {

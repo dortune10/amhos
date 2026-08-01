@@ -1,6 +1,7 @@
 import { cloudStore } from '../../data/store';
 import type { ReferralStatus, RiskTier } from '../../data/types';
 import { useStoreVersion } from '../../data/useStoreVersion';
+import { SLA_HOURS, isSlaBreached } from '../../domain/referralSla';
 
 const TIERS: RiskTier[] = ['High', 'Medium', 'Low'];
 const STATUSES: ReferralStatus[] = ['flagged', 'dispatched', 'received', 'outcome_logged'];
@@ -20,6 +21,9 @@ export function DistrictView() {
     status,
     count: referrals.filter((r) => r.status === status).length,
   }));
+
+  const now = new Date().toISOString();
+  const breachedCount = referrals.filter((r) => isSlaBreached(r, now)).length;
 
   return (
     <div className="district-view">
@@ -43,6 +47,18 @@ export function DistrictView() {
               {status.replace('_', ' ')}: {count}
             </li>
           ))}
+        </ul>
+      </section>
+      <section>
+        <h3>Transport delays</h3>
+        <p className="access-note">
+          In-flight referrals past the {SLA_HOURS}h expected transit window — a signal about
+          transport capacity, not individual cases.
+        </p>
+        <ul>
+          <li className={breachedCount > 0 ? 'district-alert' : undefined}>
+            Delayed in transit: {breachedCount}
+          </li>
         </ul>
       </section>
     </div>

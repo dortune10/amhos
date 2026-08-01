@@ -9,6 +9,8 @@ export interface Registration {
   riskReasons: string[];
   createdAt: string;
   syncedAt?: string;
+  /** Set when the caseworker records the birth; triggers postnatal scheduling. */
+  deliveredAt?: string;
 }
 
 export type ReferralStatus = 'flagged' | 'dispatched' | 'received' | 'outcome_logged';
@@ -34,6 +36,20 @@ export interface MotherCheckIn {
   createdAt: string;
   reviewed: boolean;
   escalated: boolean;
+  syncedAt?: string;
+}
+
+export type VisitKind = 'anc' | 'postnatal';
+
+export interface ScheduledVisit {
+  id: string;
+  registrationId: string;
+  patientName: string;
+  kind: VisitKind;
+  label: string;
+  dueAt: string;
+  completedAt?: string;
+  createdAt: string;
   syncedAt?: string;
 }
 

@@ -1,6 +1,7 @@
 import { cloudStore, localQueueStore } from '../../data/store';
-import type { MotherCheckIn, Referral, Registration } from '../../data/types';
+import type { MotherCheckIn, Referral, Registration, ScheduledVisit } from '../../data/types';
 import { scoreRisk } from '../../domain/riskEngine';
+import { postnatalSchedule } from '../../domain/visitSchedule';
 
 interface SeedPatient {
   id: string;
@@ -9,6 +10,8 @@ interface SeedPatient {
   riskFactors: string[];
   daysAgo: number;
   referralStatus?: Referral['status'];
+  /** Set to seed a delivered patient mid-way through her 0-48h postnatal window. */
+  deliveredHoursAgo?: number;
 }
 
 // Northern-Nigeria-plausible names and a spread of gestational ages / risk
@@ -22,6 +25,8 @@ const SEED_PATIENTS: SeedPatient[] = [
     riskFactors: ['prior_csection', 'advanced_maternal_age'],
     daysAgo: 6,
     referralStatus: 'outcome_logged',
+    // Delivered 30h ago: her 6h and 24h checks are overdue, 48h is upcoming.
+    deliveredHoursAgo: 30,
   },
   {
     id: 'demo-reg-2',
@@ -79,11 +84,10 @@ const SEED_CHECK_INS: { id: string; registrationId: string; symptom: string; hou
   },
 ];
 
-// Fixed base date keeps the seeded timeline stable and readable during a demo.
-const DEMO_NOW = new Date('2026-07-31T09:00:00Z').getTime();
-
-const daysAgoIso = (days: number) => new Date(DEMO_NOW - days * 86_400_000).toISOString();
-const hoursAgoIso = (hours: number) => new Date(DEMO_NOW - hours * 3_600_000).toISOString();
+// Anchored to real "now" so relative states the UI derives from the clock --
+// overdue visits, SLA-breached referrals -- are genuinely true at demo time.
+const daysAgoIso = (days: number) => new Date(Date.now() - days * 86_400_000).toISOString();
+const hoursAgoIso = (hours: number) => new Date(Date.now() - hours * 3_600_000).toISOString();
 
 export function resetDemo(): void {
   localQueueStore.clear();
@@ -100,11 +104,14 @@ export function loadDemoScenario(): void {
 
   const registrations: Registration[] = [];
   const referrals: Referral[] = [];
+  const visits: ScheduledVisit[] = [];
 
   for (const seed of SEED_PATIENTS) {
     const { tier, reasons } = scoreRisk(seed.riskFactors);
     const createdAt = daysAgoIso(seed.daysAgo);
     const syncedAt = daysAgoIso(Math.max(seed.daysAgo - 0.5, 0));
+    const deliveredAt =
+      seed.deliveredHoursAgo !== undefined ? hoursAgoIso(seed.deliveredHoursAgo) : undefined;
 
     const registration: Registration = {
       id: seed.id,
@@ -115,8 +122,24 @@ export function loadDemoScenario(): void {
       riskReasons: reasons,
       createdAt,
       syncedAt,
+      deliveredAt,
     };
     registrations.push(registration);
+
+    if (deliveredAt) {
+      postnatalSchedule(deliveredAt).forEach((checkpoint, index) => {
+        visits.push({
+          id: `${seed.id}-visit-${index}`,
+          registrationId: seed.id,
+          patientName: seed.patientName,
+          kind: 'postnatal',
+          label: checkpoint.label,
+          dueAt: checkpoint.dueAt,
+          createdAt: deliveredAt,
+          syncedAt: deliveredAt,
+        });
+      });
+    }
 
     if (tier === 'High') {
       referrals.push({
@@ -148,8 +171,8 @@ export function loadDemoScenario(): void {
     };
   });
 
-  localQueueStore.replaceAll({ registrations, referrals, checkIns });
-  cloudStore.mergeSyncedItems({ registrations, referrals, checkIns });
+  localQueueStore.replaceAll({ registrations, referrals, checkIns, visits });
+  cloudStore.mergeSyncedItems({ registrations, referrals, checkIns, visits });
 
   for (const referral of referrals) {
     cloudStore.addNotification({

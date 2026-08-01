@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { loadDemoScenario, resetDemo } from './demoData';
 import { cloudStore, localQueueStore } from '../../data/store';
+import { isSlaBreached } from '../../domain/referralSla';
 
 describe('loadDemoScenario', () => {
   beforeEach(() => {
@@ -41,6 +42,29 @@ describe('loadDemoScenario', () => {
     const { registrations, referrals } = localQueueStore.getAll();
     expect(registrations.every((r) => r.syncedAt)).toBe(true);
     expect(referrals.every((r) => r.syncedAt)).toBe(true);
+  });
+
+  it('seeds a delivered patient mid-way through her postnatal window', () => {
+    loadDemoScenario();
+    const { registrations, visits } = localQueueStore.getAll();
+    expect(registrations.some((r) => r.deliveredAt)).toBe(true);
+    expect(visits.filter((v) => v.kind === 'postnatal').length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('leaves at least one postnatal check overdue, so the worklist is not empty', () => {
+    loadDemoScenario();
+    const now = Date.now();
+    const overdue = localQueueStore
+      .getAll()
+      .visits.filter((v) => !v.completedAt && new Date(v.dueAt).getTime() < now);
+    expect(overdue.length).toBeGreaterThan(0);
+  });
+
+  it('leaves one in-flight referral past its transit SLA, to demo delay tracking', () => {
+    loadDemoScenario();
+    const now = new Date().toISOString();
+    const breached = cloudStore.getAll().referrals.filter((r) => isSlaBreached(r, now));
+    expect(breached.length).toBeGreaterThan(0);
   });
 
   it('is idempotent -- re-running replaces rather than duplicates', () => {
